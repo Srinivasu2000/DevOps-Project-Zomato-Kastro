@@ -7,6 +7,7 @@ pipeline {
         IMAGE_TAG       = "latest"
         CONTAINER_NAME  = "zomato-container"
         DOCKER_CREDS    = "docker-cred"
+        NEXUS_CRED_ID  = "nexus-cred"
     }
 
     stages {
@@ -33,6 +34,30 @@ pipeline {
                 '''
             }
         }
+
+stage('Upload NodeJS Artifacts to Nexus') {
+    steps {
+        withCredentials([usernamePassword(
+            credentialsId: 'nexus-cred',
+            usernameVariable: 'NEXUS_USER',
+            passwordVariable: 'NEXUS_PASS'
+        )]) {
+            sh '''
+                echo "Uploading build artifacts to Nexus..."
+
+                NEXUS_URL="http://65.0.182.83:8081/repository/node-artifacts"
+
+                for file in $(find build -type f); do
+                    curl -u $NEXUS_USER:$NEXUS_PASS --upload-file $file $NEXUS_URL/$(basename $file)
+                done
+            '''
+        }
+    }
+}
+
+
+
+        
 
         // Build Docker image
         stage('Build Docker Image') {
