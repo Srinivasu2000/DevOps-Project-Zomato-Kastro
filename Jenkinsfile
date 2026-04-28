@@ -8,6 +8,7 @@ pipeline {
         CONTAINER_NAME  = "zomato-container"
         DOCKER_CREDS    = "docker-cred"
         NEXUS_CRED_ID  = "nexus-cred"
+        SONAR_SCANNER = "sonar-scanner"
     }
 
     stages {
@@ -53,11 +54,7 @@ stage('Upload NodeJS Artifacts to Nexus') {
             '''
         }
     }
-}
-
-
-
-        
+}       
 
         // Build Docker image
         stage('Build Docker Image') {
@@ -98,6 +95,25 @@ stage('Upload NodeJS Artifacts to Nexus') {
                 }
             }
         }
+
+
+
+stage('SonarQube Analysis') {
+    steps {
+        withSonarQubeEnv('sonar-server') {
+            sh '''
+                sonar-scanner \
+                -Dsonar.projectKey=zomato \
+                -Dsonar.sources=. \
+                -Dsonar.host.url=http://65.0.182.83:9000 \
+                -Dsonar.login=$SONAR_AUTH_TOKEN
+            '''
+        }
+    }
+}
+
+
+        
 
         // Deploy to Kubernetes (EKS)
         stage('Deploy to Kubernetes') {
