@@ -45,7 +45,7 @@ stage('Upload NodeJS Artifacts to Nexus') {
             sh '''
                 echo "Uploading build artifacts to Nexus..."
 
-                NEXUS_URL="http://65.0.182.83:8081/repository/node-artifacts"
+                NEXUS_URL="http://65.0.182.83:8081/repository/zomato"
 
                 for file in $(find build -type f); do
                     curl -u $NEXUS_USER:$NEXUS_PASS --upload-file $file $NEXUS_URL/$(basename $file)
