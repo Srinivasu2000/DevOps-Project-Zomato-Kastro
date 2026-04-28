@@ -100,18 +100,20 @@ stage('Upload NodeJS Artifacts to Nexus') {
 
 stage('SonarQube Analysis') {
     steps {
-        withSonarQubeEnv('sonar-server') {
-            sh '''
-                sonar-scanner \
-                -Dsonar.projectKey=zomato \
-                -Dsonar.sources=. \
-                -Dsonar.host.url=http://65.0.182.83:9000 \
-                -Dsonar.login=$SONAR_AUTH_TOKEN
-            '''
+        script {
+            def scannerHome = tool 'sonar-scanner'
+            withSonarQubeEnv('sonar-server') {
+                sh """
+                    ${scannerHome}/bin/sonar-scanner \
+                    -Dsonar.projectKey=zomato \
+                    -Dsonar.sources=. \
+                    -Dsonar.host.url=http://65.0.182.83:9000 \
+                    -Dsonar.login=$SONAR_AUTH_TOKEN
+                """
+            }
         }
     }
 }
-
 
         
 
