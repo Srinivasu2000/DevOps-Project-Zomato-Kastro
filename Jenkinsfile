@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_USER     = "srinivasu56"
-        IMAGE_NAME      = "js-project-zomato"
+        IMAGE_NAME      = "zomato"
         IMAGE_TAG       = "latest"
         CONTAINER_NAME  = "zomato-container"
         DOCKER_CREDS    = "docker-cred"
