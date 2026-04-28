@@ -8,7 +8,7 @@ pipeline {
         CONTAINER_NAME  = "zomato-container"
         DOCKER_CREDS    = "docker-cred"
         NEXUS_CRED_ID  = "nexus-cred"
-        SONAR_SCANNER = "sonar-scanner"
+        SONAR_SCANNER = "sonar-server"
     }
 
     stages {
